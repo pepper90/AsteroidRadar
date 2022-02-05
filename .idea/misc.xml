@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/starter/app/src/main/res/drawable/ic_image_not_found.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/starter/app/src/main/res/drawable/loading_vector.xml" value="0.19" />
         <entry key="..\:/AndroidProjects/starter/app/src/main/res/layout/fragment_detail.xml" value="0.11302083333333333" />
-        <entry key="..\:/AndroidProjects/starter/app/src/main/res/layout/fragment_main.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/starter/app/src/main/res/layout/fragment_main.xml" value="0.136" />
         <entry key="..\:/AndroidProjects/starter/app/src/main/res/layout/item_asteroid.xml" value="0.20652173913043478" />
+        <entry key="..\:/AndroidProjects/starter/app/src/main/res/menu/main_overflow_menu.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
