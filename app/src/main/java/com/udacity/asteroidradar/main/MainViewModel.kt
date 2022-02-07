@@ -1,16 +1,16 @@
 package com.udacity.asteroidradar.main
 
+import android.app.Application
 import android.text.format.DateFormat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants.API_KEY
 import com.udacity.asteroidradar.Constants.API_QUERY_DATE_FORMAT
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.*
@@ -18,10 +18,23 @@ import kotlin.collections.ArrayList
 
 enum class AsteroidApiStatus { LOADING, ERROR, DONE }
 
-class MainViewModel : ViewModel() {
-    private val _asteroids = MutableLiveData<List<Asteroid>>()
-    val asteroids: LiveData<List<Asteroid>>
-    get() = _asteroids
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val database = getDatabase(application)
+    private val asteroidsRepository = AsteroidsRepository(database)
+
+    init {
+        viewModelScope.launch {
+            asteroidsRepository.refreshAsteroids()
+            getPictureOfDay()
+        }
+//        fetchData()
+    }
+
+    val asteroids = asteroidsRepository.asteroids
+
+//    private val _asteroids = MutableLiveData<List<Asteroid>>()
+//    val asteroids: LiveData<List<Asteroid>>
+//    get() = _asteroids
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay?>()
     val pictureOfDay: LiveData<PictureOfDay?>
@@ -35,9 +48,7 @@ class MainViewModel : ViewModel() {
     val navigateToSingleAsteroid : LiveData<Asteroid?>
     get() = _navigateToSingleAsteroid
 
-    init {
-        fetchData()
-    }
+
 
     fun navigateToSingleAsteroid(asteroidId: Asteroid) {
         _navigateToSingleAsteroid.value = asteroidId
@@ -49,20 +60,20 @@ class MainViewModel : ViewModel() {
 
 
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun getAsteroids(startDate: String, endDate: String) {
-        val responseBody = AsteroidApi.retrofitService.getAsteroids(startDate, endDate, API_KEY)
-        val jsonObject = JSONObject(responseBody.string())
-        _asteroids.value = parseAsteroidsJsonResult(jsonObject)
-    }
+//    @Suppress("BlockingMethodInNonBlockingContext")
+//    private suspend fun getAsteroids(startDate: String, endDate: String) {
+//        val responseBody = AsteroidApi.retrofitService.getAsteroids(startDate, endDate, API_KEY)
+//        val jsonObject = JSONObject(responseBody.string())
+//        _asteroids.value = parseAsteroidsJsonResult(jsonObject)
+//    }
 
-    private fun getToday() : String {
+    fun today() : String {
         val date = Calendar.getInstance()
         date.add(Calendar.DAY_OF_YEAR,0)
         return DateFormat.format(API_QUERY_DATE_FORMAT, date).toString()
     }
 
-    private fun getSevenDays(): String {
+    fun plusSevenDays(): String {
         val date = Calendar.getInstance()
         date.add(Calendar.DAY_OF_YEAR, +7)
         return DateFormat.format(API_QUERY_DATE_FORMAT, date).toString()
@@ -74,16 +85,7 @@ class MainViewModel : ViewModel() {
 
     private fun fetchData() {
         viewModelScope.launch {
-            _status.value = AsteroidApiStatus.LOADING
-            try {
                 getPictureOfDay()
-                getAsteroids(getToday(),getSevenDays())
-                _status.value = AsteroidApiStatus.DONE
-            } catch (e: Exception) {
-                _status.value = AsteroidApiStatus.ERROR
-                _pictureOfDay.value = null
-                _asteroids.value = ArrayList()
-            }
         }
     }
 }

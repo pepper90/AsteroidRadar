@@ -43,17 +43,7 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
 }
 
-@BindingAdapter("marsApiStatus")
-fun bindStatus(statusProgressBar: ProgressBar, status: AsteroidApiStatus) {
-    when (status) {
-        AsteroidApiStatus.LOADING -> {
-            statusProgressBar.visibility = View.VISIBLE
-        }
-        AsteroidApiStatus.ERROR -> {
-            statusProgressBar.visibility = View.VISIBLE
-        }
-        AsteroidApiStatus.DONE -> {
-            statusProgressBar.visibility = View.GONE
-        }
-    }
+@BindingAdapter("goneIfNotNull")
+fun goneIfNotNull(view: View, it: Any?) {
+    view.visibility = if (it != null) View.GONE else View.VISIBLE
 }
