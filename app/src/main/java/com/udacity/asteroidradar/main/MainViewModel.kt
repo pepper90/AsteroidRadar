@@ -40,9 +40,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val pictureOfDay: LiveData<PictureOfDay?>
     get() = _pictureOfDay
 
-    private val _status = MutableLiveData<AsteroidApiStatus>()
-    val status: LiveData<AsteroidApiStatus>
-        get() = _status
+//    private val _status = MutableLiveData<AsteroidApiStatus>()
+//    val status: LiveData<AsteroidApiStatus>
+//        get() = _status
 
     private val _navigateToSingleAsteroid = MutableLiveData<Asteroid?>()
     val navigateToSingleAsteroid : LiveData<Asteroid?>
@@ -83,9 +83,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _pictureOfDay.value = AsteroidApi.retrofitService.getPictureOfDay(API_KEY)
     }
 
-    private fun fetchData() {
-        viewModelScope.launch {
-                getPictureOfDay()
-        }
-    }
+//    private fun fetchData() {
+//        viewModelScope.launch {
+//                getPictureOfDay()
+//        }
+//    }
 }

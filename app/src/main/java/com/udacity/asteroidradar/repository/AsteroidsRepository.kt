@@ -7,7 +7,7 @@ import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants.API_KEY
 import com.udacity.asteroidradar.api.AsteroidApi
-import com.udacity.asteroidradar.api.NetworkAsteroidContainer
+import com.udacity.asteroidradar.api.AsteroidContainer
 import com.udacity.asteroidradar.api.asDatabaseModel
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidsDatabase
@@ -39,7 +39,7 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
                 )
                 val jsonObject = JSONObject(asteroidsResponse.string())
                 val asteroids = parseAsteroidsJsonResult(jsonObject)
-                val networkAsteroidContainer = NetworkAsteroidContainer(asteroids)
+                val networkAsteroidContainer = AsteroidContainer(asteroids)
                 database.asteroidDao.insertAll(*networkAsteroidContainer.asDatabaseModel())
             } catch (e: Exception) {
                 Log.e(TAG, e.printStackTrace().toString())
