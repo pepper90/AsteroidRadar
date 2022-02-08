@@ -1,3 +1,12 @@
+IMPORTANT:
+To get an API Key from NASA, follow the instructions as listed:
+
+1 - Go to the following URL - https://api.nasa.gov/ and scroll down a little and you are going to see "Generate API Key" title
+2 - Fill the required fields, click the Signup button and you will get a API key (the API Key is also going to be sent to your email ).
+3 - Copy & paste your API key inside Constants.kt file
+4 - Run the app.
+
+
 # Project Title
 
 Asteroid Radar
