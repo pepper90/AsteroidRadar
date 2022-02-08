@@ -1,21 +1,14 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import android.text.format.DateFormat
 import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.Constants.API_KEY
-import com.udacity.asteroidradar.Constants.API_QUERY_DATE_FORMAT
 import com.udacity.asteroidradar.PictureOfDay
-import com.udacity.asteroidradar.api.AsteroidApi
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.repository.AsteroidsFilter
 import com.udacity.asteroidradar.repository.AsteroidsRepository
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -33,15 +26,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    val asteroids = asteroidsRepository.asteroids
-
     private val _pictureOfDay = MutableLiveData<PictureOfDay?>()
     val pictureOfDay: LiveData<PictureOfDay?>
         get() = _pictureOfDay
 
+    private val _filter = MutableLiveData<AsteroidsFilter>()
+    val filter: LiveData<AsteroidsFilter>
+        get() = _filter
+
     private val _navigateToSingleAsteroid = MutableLiveData<Asteroid?>()
     val navigateToSingleAsteroid: LiveData<Asteroid?>
         get() = _navigateToSingleAsteroid
+
+    val asteroids = Transformations.switchMap(filter) {
+        asteroidsRepository.sortAsteroids(it)
+    }
+
+    fun updateFilters(filter: AsteroidsFilter) {
+        _filter.value = filter
+    }
 
     fun navigateToSingleAsteroid(asteroidId: Asteroid) {
         _navigateToSingleAsteroid.value = asteroidId
@@ -53,7 +56,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private suspend fun getPictureOfDay() {
         try {
-            _pictureOfDay.value = AsteroidApi.retrofitService.getPictureOfDay(API_KEY)
+            _pictureOfDay.value = asteroidsRepository.getImageOfToday()
         } catch (e: Exception) {
             e.message?.let { Log.d(TAG, it) }
         }
