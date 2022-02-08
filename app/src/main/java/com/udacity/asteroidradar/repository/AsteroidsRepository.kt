@@ -73,6 +73,10 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
         }
     }
 
+    fun deletePastAsteroids() {
+        database.asteroidDao.deletePastAsteroid(today())
+    }
+
     private fun today() : String {
         val date = Calendar.getInstance()
         date.add(Calendar.DAY_OF_YEAR,0)
