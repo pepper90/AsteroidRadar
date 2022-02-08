@@ -26,7 +26,8 @@ class MainFragment : Fragment() {
 
         viewModel.pictureOfDay.observe(viewLifecycleOwner) { pictureOfDay ->
             if (pictureOfDay?.mediaType == "image") {
-                Picasso.get().load(pictureOfDay.url)
+                Picasso.get()
+                    .load(pictureOfDay.url)
                     .placeholder(R.drawable.loading_animation)
                     .error(R.drawable.ic_image_not_found)
                     .into(binding.activityMainImageOfTheDay)
