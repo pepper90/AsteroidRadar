@@ -6,8 +6,8 @@ import androidx.room.*
 
 @Dao
 interface AsteroidDao {
-    @Query("select * from databaseasteroid")
-    fun getAsteroids(): LiveData<List<DatabaseAsteroid>>
+    @Query("select * from databaseasteroid where closeApproachDate >= :today order by closeApproachDate asc")
+    fun getAsteroids(today: String): LiveData<List<DatabaseAsteroid>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg videos: DatabaseAsteroid)
