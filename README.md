@@ -7,11 +7,7 @@ To get an API Key from NASA, follow the instructions as listed:
 4 - Run the app.
 
 
-# Project Title
-
-Asteroid Radar
-
-## Getting Started
+# Asteroid Radar
 
 Asteroid Radar is an app to view the asteroids detected by NASA that pass near Earth, you can view all the detected asteroids in a period of time, their data (Size, velocity, distance to Earth) and if they are potentially hazardous.
 
@@ -22,7 +18,7 @@ This kind of app is one of the most usual in the real world and it uses the foll
 - saving data to a database,
 - display the data in a clear, compelling UI.
 
-## Project Instructions
+## Features
 
 The most important dependencies we are using are:
 - Retrofit to download the data from the Internet.
